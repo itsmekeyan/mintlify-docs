@@ -1,0 +1,47 @@
+---
+title: 'API Key Generation'
+description: 'Step-by-step guide to generate API keys for Kuralynx API'
+---
+
+To use the Kuralynx API, you'll need to generate an API key from your dashboard. Follow these steps to create your API key:
+
+## Step 1: Access Settings
+
+Navigate to your Kuralynx dashboard and click on the **Settings** option in the navigation menu.
+
+![Click on Settings in the dashboard](/reference_images/api-key-generation/step1_click_settings.png)
+
+## Step 2: Navigate to API Keys
+
+In the settings menu, locate and click on the **API Keys** section.
+
+![Click on API Keys in settings](/reference_images/api-key-generation/step2_click_api_keys.png)
+
+## Step 3: Generate New API Key
+
+Click on the **Generate Key** button to create a new API key for your account.
+
+![Click Generate Key button](/reference_images/api-key-generation/step3_click_generate_key.png)
+
+## Step 4: Copy Your API Key
+
+Once generated, your API key will be displayed. Make sure to copy and securely store this key as it won't be shown again.
+
+![API key generated and displayed](/reference_images/api-key-generation/step4_api_key_generated.png)
+
+## Using Your API Key
+
+Once you have your API key, include it in the `Authorization` header of your API requests:
+
+```bash
+curl 'https://api.kuralynx.com/v1/send-call' \
+--header 'Authorization: YOUR_API_KEY_HERE' \
+--data '{
+    "agent_id": "<agent_id>",
+    "call_to": "<mobile number to call with country code>"
+}'
+```
+
+<Note>
+  Keep your API key secure and never share it publicly. If you suspect your key has been compromised, you can regenerate it from the dashboard.
+</Note> 

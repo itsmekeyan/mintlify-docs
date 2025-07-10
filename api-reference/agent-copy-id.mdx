@@ -1,0 +1,33 @@
+---
+title: 'Agent ID Retrieval'
+description: 'Step-by-step guide to retrieve agent ID for Kuralynx API'
+---
+
+To use the Kuralynx API, you'll need to copy your agent ID from the dashboard. Follow these steps to find and copy your agent ID:
+
+## Step 1: Locate Your Agent
+
+Navigate to your Kuralynx dashboard and find the agent you want to use for making calls. Each agent has a unique ID that you'll need for API requests.
+
+## Step 2: Copy Agent ID
+
+Click on the copy icon next to your agent's ID to copy it to your clipboard. This ID will be used in the `agent_id` parameter when making API calls.
+
+![Copy Agent ID](/reference_images/agent-copy-id/agent_copy_id.png)
+
+## Using Your Agent ID
+
+Once you have copied your agent ID, you can use it in your API requests:
+
+```bash
+curl 'https://api.kuralynx.com/v1/send-call' \
+--header 'Authorization: YOUR_API_KEY_HERE' \
+--data '{
+    "agent_id": "YOUR_AGENT_ID_HERE",
+    "call_to": "<mobile number to call with country code>"
+}'
+```
+
+<Note>
+  Make sure you're using the correct agent ID for the agent you want to handle the calls. Each agent has different configurations and capabilities.
+</Note> 
