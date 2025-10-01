@@ -39,6 +39,17 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Platform",
+            "pages": [
+              "changelog/september-2025"
+            ]
+          }
+        ]
       }
     ],
     "global": {
