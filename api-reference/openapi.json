@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://api.kuralynx.com/v1"
+      "url": "https://api.kuralx.com/v1"
     }
   ],
   "security": [
@@ -95,6 +95,16 @@
           "call_to": {
             "type": "string",
             "description": "Mobile number to call with country code (e.g., +1234567890)"
+          },
+          "custom_variables": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Optional custom variables dictionary for dynamic variable injection in agent instructions, welcome messages, and workflow nodes. Variables are stored with queued calls and available when the call is processed. Use {{variable}} or {variable} syntax in your agent prompts.",
+            "example": {
+              "customer_name": "John Doe",
+              "order_number": "12345",
+              "appointment_date": "2025-01-15"
+            }
           }
         }
       },

@@ -2,3 +2,127 @@
 title: 'Send Call'
 openapi: 'POST /send-call'
 ---
+
+## Custom Variables
+
+Custom variables allow you to pass dynamic data that gets injected into your agent's instructions, welcome messages, and workflow nodes. This enables personalized conversations based on customer data, order information, appointment details, and more.
+
+### How It Works
+
+When you provide `custom_variables` in your request, they are:
+- **Stored with the call**: Custom variables are preserved even if the call is queued due to concurrency limits
+- **Injected into agent prompts**: Variables can be referenced in your agent's instructions using `{{variable}}` or `{variable}` syntax
+- **Available in welcome messages**: Use variables in the agent's first sentence/welcome message
+- **Used in workflow nodes**: For multi-conversation agents, variables are replaced in workflow node instructions
+- **Provided as context**: Variables are also made available to the LLM as context during conversations
+
+### Variable Syntax
+
+You can use variables in two formats:
+- `{{variable_name}}` - Double curly braces (recommended)
+- `{variable_name}` - Single curly braces
+
+Both formats work identically. The double curly brace format is recommended for clarity.
+
+### Special Aliases
+
+The following special aliases are automatically created from common variable names:
+- `customer.name` ← from `customer_name`
+- `customer.email` ← from `customer_email`
+- `customer.phone` ← from `customer_phone`
+
+These aliases are available in addition to the original variable names.
+
+### Example Request
+
+<ParamField body="custom_variables" type="object">
+  <ParamField body="customer_name" type="string">
+    Customer's full name
+  </ParamField>
+  <ParamField body="order_number" type="string">
+    Order or reference number
+  </ParamField>
+  <ParamField body="appointment_date" type="string">
+    Appointment date/time
+  </ParamField>
+</ParamField>
+
+```json
+{
+  "agent_id": "your-agent-id",
+  "call_to": "+1234567890",
+  "custom_variables": {
+    "customer_name": "John Doe",
+    "order_number": "ORD-12345",
+    "appointment_date": "January 15, 2025 at 2:00 PM"
+  }
+}
+```
+
+### Using Variables in Agent Instructions
+
+In your agent's prompt/instructions, you can reference variables like this:
+
+```
+Hello {{customer_name}}, this is a call regarding your order {{order_number}}. 
+Your appointment is scheduled for {{appointment_date}}.
+```
+
+When the call is made, these will be replaced with the actual values:
+```
+Hello John Doe, this is a call regarding your order ORD-12345. 
+Your appointment is scheduled for January 15, 2025 at 2:00 PM.
+```
+
+### Using Variables in Welcome Messages
+
+If your agent has a `first_sentence` configured, you can use variables there too:
+
+```
+Welcome {{customer_name}}! We're calling about order {{order_number}}.
+```
+
+### Common Use Cases
+
+**Customer Information**
+```json
+{
+  "custom_variables": {
+    "customer_name": "Jane Smith",
+    "customer_email": "jane@example.com",
+    "customer_phone": "+1234567890"
+  }
+}
+```
+
+**Order Details**
+```json
+{
+  "custom_variables": {
+    "order_number": "ORD-789",
+    "order_total": "$149.99",
+    "order_date": "2025-01-10",
+    "shipping_status": "In Transit"
+  }
+}
+```
+
+**Appointment Scheduling**
+```json
+{
+  "custom_variables": {
+    "appointment_date": "January 20, 2025",
+    "appointment_time": "3:00 PM",
+    "appointment_type": "Follow-up Consultation",
+    "location": "Main Office"
+  }
+}
+```
+
+### Notes
+
+- Custom variables are optional - you can make calls without them
+- Variables are stored as JSONB in the database, so they're preserved for queued calls
+- Variable names are case-sensitive
+- Variable values are converted to strings when injected into text
+- If a variable is not provided, the placeholder (e.g., `{{variable_name}}`) will remain in the text
